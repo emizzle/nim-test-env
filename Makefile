@@ -52,7 +52,12 @@ foo bar: | build deps
 # building Nim programs
 json_ser: | build deps
 	echo -e $(BUILD_MSG) "build/json_ser" && \
-		$(ENV_SCRIPT) nim c -o:build/$@ $(NIM_PARAMS) "src/json_ser.nim"
+		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_ser.nim"
+
+# building Nim programs
+json_null: | build deps
+	echo -e $(BUILD_MSG) "build/json_null" && \
+		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_null.nim"
 
 clean: | clean-common
 	rm -rf build/{foo,bar}
