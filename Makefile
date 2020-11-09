@@ -50,7 +50,7 @@ foo bar: | build deps
 		$(ENV_SCRIPT) nim c -o:build/$@ $(NIM_PARAMS) "$@.nim"
 
 # building Nim programs
-json_ser_tables: | build deps
+json_ser: | build deps
 	echo -e $(BUILD_MSG) "build/json_ser" && \
 		$(ENV_SCRIPT) nim c -o:build/$@ $(NIM_PARAMS) "src/json_ser.nim"
 
