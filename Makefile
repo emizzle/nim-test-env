@@ -59,6 +59,11 @@ json_null: | build deps
 	echo -e $(BUILD_MSG) "build/json_null" && \
 		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_null.nim"
 
+# building Nim programs
+sigsegv: | build deps
+	echo -e $(BUILD_MSG) "build/sigsegv" && \
+		$(ENV_SCRIPT) nim c --run --verbosity:3 --threads:on --experimental -o:build/$@ $(NIM_PARAMS) "src/sigsegv.nim"
+
 clean: | clean-common
 	rm -rf build/{foo,bar}
 
