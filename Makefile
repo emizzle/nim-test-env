@@ -64,6 +64,11 @@ sigsegv: | build deps
 	echo -e $(BUILD_MSG) "build/sigsegv" && \
 		$(ENV_SCRIPT) nim c --run --verbosity:3 --threads:on --experimental -o:build/$@ $(NIM_PARAMS) "src/sigsegv.nim"
 
+# building Nim programs
+get_custom_pragma: | build deps
+	echo -e $(BUILD_MSG) "build/get_custom_pragma" && \
+		$(ENV_SCRIPT) nim c --run --verbosity:3 --threads:on --experimental -o:build/$@ $(NIM_PARAMS) "src/get_custom_pragma.nim"
+
 clean: | clean-common
 	rm -rf build/{foo,bar}
 
