@@ -60,6 +60,11 @@ json_ser_options: | build deps
 		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_ser_options.nim"
 
 # building Nim programs
+result_chronos: | build deps
+	echo -e $(BUILD_MSG) "build/result_chronos" && \
+		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/result_chronos.nim"
+
+# building Nim programs
 json_null: | build deps
 	echo -e $(BUILD_MSG) "build/json_null" && \
 		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_null.nim"
