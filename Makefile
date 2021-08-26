@@ -79,6 +79,11 @@ get_custom_pragma: | build deps
 	echo -e $(BUILD_MSG) "build/get_custom_pragma" && \
 		$(ENV_SCRIPT) nim c --run --verbosity:3 --threads:on --experimental -o:build/$@ $(NIM_PARAMS) "src/get_custom_pragma.nim"
 
+# building Nim programs
+web3_contracts: | build deps
+	echo -e $(BUILD_MSG) "build/web3_contracts" && \
+		$(ENV_SCRIPT) nim c --run --verbosity:3 --threads:on --experimental -o:build/$@ $(NIM_PARAMS) "src/web3_contracts.nim"
+
 clean: | clean-common
 	rm -rf build/{foo,bar}
 
