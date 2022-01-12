@@ -69,6 +69,11 @@ json_null: | build deps
 	echo -e $(BUILD_MSG) "build/json_null" && \
 		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/json_null.nim"
 
+
+# building Nim programs
+chronos_result_support: | build deps
+	echo -e $(BUILD_MSG) "build/chronos_result_support" && \
+		$(ENV_SCRIPT) nim c -d:nimDumpAsync --run -o:build/$@ $(NIM_PARAMS) "src/chronos_result_support.nim"
 # building Nim programs
 sigsegv: | build deps
 	echo -e $(BUILD_MSG) "build/sigsegv" && \
