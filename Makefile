@@ -71,6 +71,11 @@ json_null: | build deps
 
 
 # building Nim programs
+result_no_error_loss: | build deps
+	echo -e $(BUILD_MSG) "build/result_no_error_loss" && \
+		$(ENV_SCRIPT) nim c --run -o:build/$@ $(NIM_PARAMS) "src/result_no_error_loss.nim"
+
+# building Nim programs
 chronos_result_support: | build deps
 	echo -e $(BUILD_MSG) "build/chronos_result_support" && \
 		$(ENV_SCRIPT) nim c -d:nimDumpAsync --run -o:build/$@ $(NIM_PARAMS) "src/chronos_result_support.nim"
