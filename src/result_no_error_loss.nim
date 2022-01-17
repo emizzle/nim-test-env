@@ -11,21 +11,10 @@ type
   ErrorInfo = object of RootObj
     info: string
 
-  CidErrorInfo = object of ErrorInfo
-    desc: string
-
-  # CodexError[T] = object of RootObj
-  #   kind: T
-  #   parent: ErrorInfo
-
   CodexError = object of CatchableError
 
-# func toErrorInfo(v: CidError): CidErrorInfo =
-#   result.desc = $v
-
 template `?`*[T, E](self: Future[Result[T, E]]): auto =
-  # can only be used within the body of a nim-chronos {.async.} proc
-  # h/t @emizzle 🎉
+  # co-authored by @michaelsbradleyjr
   assert declared(chronosInternalRetFuture)
   let v = (self)
   var rv = await v
@@ -71,30 +60,7 @@ proc mapErrTo*[T, E1, E2](r: Result[T, E1], v: E2):
 proc mapErrTo*[T, E1, E2](r: Future[Result[T, E1]], v: E2):
   Future[Result[T, E2]] {.async.} =
 
-  mixin toErrorInfo
-  var ve = v
-
-  return (await r).mapErr(
-    proc (e: E1): E2 =
-      when e is E2:
-        return ve
-      elif compiles(e.toException):
-        ve.parent = e.toException
-      elif e is enum:
-        ve.parent = newException(CodexError, $e)
-      elif e is ref CatchableError:
-        echo "typeof e: ", typeof e
-        ve.parent = e
-      ve
-  )
-
-# proc mapErrTo*[T, E1, E2](r: Future[Result[T, E1]], v: E2):
-#   Future[Result[T, E2]] {.async.} =
-
-#   return (await r).mapErrTo(v)
-
-
-
+  return (await r).mapErrTo(v)
 
 # chunker module
 type
@@ -128,11 +94,6 @@ proc getBytes*(c: Chunker): Future[ChunkerResult[seq[byte]]] {.async.} =
 
   return ok buff
 
-
-
-
-
-
 # node module
 type
   NodeRef* = ref object
@@ -141,7 +102,6 @@ type
     StoreInvalidCid   = "couldn't create cid from chunk data"
     StoreInvalidChunk = "couldn't get chunk bytes due to invalid chunk size"
 
-  # NodeError = object of CodexError[NodeErrorType]
   NodeError = object of CodexError
 
   NodeResult[T] = Result[T, ref NodeError]
@@ -165,13 +125,6 @@ proc store*(node: NodeRef, chunkSize: int64): Future[NodeResult[Cid]] {.async.} 
 proc new*(
   T: type NodeRef): T =
   T()
-
-
-
-
-
-
-
 
 # tests
 let
