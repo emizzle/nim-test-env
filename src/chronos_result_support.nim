@@ -12,7 +12,7 @@ template `awaitr`*[T, E](self: Future[Result[T, E]]): auto =
     when typeof(result) is typeof(rv):
       chronosInternalRetFuture.complete(rv)
     else:
-      chronosInternalRetFuture.complete(err(typeof(rv), rv.error))
+      chronosInternalRetFuture.complete(err(typeof result, rv.error))
     return chronosInternalRetFuture
 
   when not(T is void):
@@ -23,6 +23,11 @@ proc mapErrTo*[T, E1, E2](r: Future[Result[T, E1]], v: E2):
 
   return (await r).mapErr(proc (e: E1): E2 = v)
 
+# type
+#   FnResult[T] = Result[T, string]
+#   CallerResult[T] = Result[T, string]
+#   CallerMapErrResult[T] = Result[T, int]
+
 proc fn*(retErr: bool): Future[Result[int, string]] {.async.} =
   if retErr:
     return err "there was an error"
@@ -31,12 +36,11 @@ proc fn*(retErr: bool): Future[Result[int, string]] {.async.} =
 
 proc caller*(retErr: bool): Future[Result[int, string]] {.async.} =
   let r = awaitr fn(retErr)
-  debugEcho "r = ", $r
   return ok r
 
-proc callerMapErr*(retErr: bool): Future[Result[int, int]] {.async.} =
+proc callerMapErr*(retErr: bool): Future[Result[string, int]] {.async.} =
   let r = awaitr (fn(retErr).mapErrTo(0))
-  return ok r
+  return ok $r
 
 var res = waitFor caller(true)
 assert res.isErr
@@ -52,4 +56,4 @@ assert resMapErr.error == 0
 
 resMapErr = waitFor callerMapErr(false)
 assert resMapErr.isOk
-assert resMapErr.get == 1
+assert resMapErr.get == "1"
